@@ -1,0 +1,51 @@
+{
+  "$ref": "#/definitions/groups",
+  "definitions": {
+    "groups": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "desc": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "url"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "items"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
