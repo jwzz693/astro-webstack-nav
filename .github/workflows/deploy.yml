@@ -23,14 +23,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install, build, and check
-        run: |
-          set -x
-          export NODE_ENV=production
-          npm install --force
-          npx astro build --verbose || echo 'Build failed, continuing...'
-          ls -la dist/ 2>/dev/null || echo 'dist directory not found'
-          echo "Build completed"
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build with Astro
+        run: npx astro build --verbose
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -47,37 +44,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  sync-platforms:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - name: Trigger Vercel Deploy Hook
-        if: env.VERCEL_DEPLOY_HOOK
-        run: curl -X POST ${{ secrets.VERCEL_DEPLOY_HOOK }}
-        env:
-          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
-          
-      - name: Trigger Netlify Build Hook
-        if: env.NETLIFY_BUILD_HOOK
-        run: curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_HOOK }}
-        env:
-          NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
-
-  seo-push:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Install dependencies
-        run: npm install
-        
-      - name: Run SEO Push Script
-        if: env.BAIDU_PUSH_TOKEN
-        run: node scripts/seo-push.js
-        env:
-          BAIDU_PUSH_TOKEN: ${{ secrets.BAIDU_PUSH_TOKEN }}
-          SITE_URL: 'https://astro-webstack.demo'
