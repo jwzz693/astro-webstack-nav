@@ -26,6 +26,7 @@ jobs:
       - name: Install, build, and check
         run: |
           set -x
+          export NODE_ENV=production
           npm ci
           npm run build
           ls -la dist/
