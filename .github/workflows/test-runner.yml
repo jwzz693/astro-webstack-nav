@@ -1,1 +1,23 @@
-name:
+# Test workflow to check runner availability
+name: Test Runner Availability
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print hello
+        run: echo "Hello from GitHub Actions runner"
+
+      - name: Print environment
+        run: |
+          echo "Runner OS: $(uname -a)"
+          echo "Current directory: $(pwd)"
+          ls -la
