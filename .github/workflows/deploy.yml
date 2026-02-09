@@ -25,8 +25,11 @@ jobs:
 
       - name: Install, build, and check
         run: |
+          set -x
           npm ci
           npm run build
+          ls -la dist/
+          echo "Build completed"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
